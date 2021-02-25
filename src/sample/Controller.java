@@ -10,7 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 
-public class Controller {
+public class Controller implements TableViewDatasource, RetirementViewDelegate {
 
     private final RetirementCalculatorView view;
     private User user;
@@ -27,7 +27,7 @@ public class Controller {
             this.view.getRetirementSavingsTextField().setText("" + this.user.getRetirementSavings());
             this.view.getTargetSavingForRetirementTextField().setText("" + this.user.getTargetSavingsForRetirement());
         }
-        setupTableView();
+        updateTableView();
     }
 
     /**
@@ -38,31 +38,9 @@ public class Controller {
      */
     public Controller(RetirementCalculatorView view) {
         this.view = view;
-        this.view.getCalculateButton().setOnAction(this::calculateRetirement);
+        this.view.setDelegate(this);
+        this.view.getTableView().setDatasource(this);
         setupView();
-    }
-
-    /**
-     * Gets data from all TextFields, creates a new User object with data, and updates
-     * the table view with the calculated data. When calculated it will save the User
-     * to the file system.
-     *
-     * @param event Event object that is passed in when the button is pressed.
-     */
-    public void calculateRetirement(ActionEvent event) {
-        try {
-            int age = Integer.parseInt(view.getAgeTextField().getText());
-            int retirementSavings = Integer.parseInt(view.getRetirementSavingsTextField().getText());
-            int targetSavings = Integer.parseInt(view.getTargetSavingForRetirementTextField().getText());
-            int annualSavings = Integer.parseInt(view.getAnnualRetirementInvestmentTextField().getText());
-
-
-            this.user = new User(age, retirementSavings, annualSavings, targetSavings);
-            updateTableView();
-
-        } catch (NumberFormatException e) {
-            System.out.println("Number Format Error");
-        }
     }
 
     /**
@@ -78,7 +56,7 @@ public class Controller {
     /**
      * Determines if the amount given from a return on investment is within 10% of the target goal
      * but less than the target.
-     *
+     * <p>
      * This is used to determine if the cell background should be yellow or white.
      *
      * @param investmentReturn The amount that was made that year.
@@ -164,34 +142,60 @@ public class Controller {
         }
     }
 
+//    /**
+//     * Helps setup the table view with number of columns, and their titles.
+//     * Also sets background colors of cells depending on the value in the cell
+//     * and adds the users data to the tableview.
+//     */
+//    private void setupTableView() {
+//        setColumnCellFactory();
+//        addDataToTableView();
+//    }
+
     /**
-     * Gets each cell in each column and updates the coloring of each cell depending
-     * on the investment return.
+     * Gets data from all TextFields, creates a new User object with data, and updates
+     * the table view with the calculated data. When calculated it will save the User
+     * to the file system.
+     *
+     * @param event Event object that is passed in when the button is pressed.
      */
-    private void setColumnCellFactory() {
-        for (int i = 0; i < view.getTableView().getColumns().size(); i++) {
-            TableColumn<int[], ?> column = view.getTableView().getColumns().get(i);
-            final int columnIndex = i;
-            column.setCellFactory(tableCell -> new TableCell() {
-                @Override
-                protected void updateItem(Object number, boolean isEmpty) {
-                    super.updateItem(number, isEmpty);
-                    Number investmentReturn = (Number)number;
-                    setText(String.valueOf(investmentReturn));
-                    handleCellColoring(this, investmentReturn, columnIndex);
-                }
-            });
+    @Override
+    public void calculateButtonPressed(ActionEvent event) {
+        System.out.println("Calculate Button Pressed");
+        try {
+            int age = Integer.parseInt(view.getAgeTextField().getText());
+            int retirementSavings = Integer.parseInt(view.getRetirementSavingsTextField().getText());
+            int targetSavings = Integer.parseInt(view.getTargetSavingForRetirementTextField().getText());
+            int annualSavings = Integer.parseInt(view.getAnnualRetirementInvestmentTextField().getText());
+
+
+            this.user = new User(age, retirementSavings, annualSavings, targetSavings);
+            updateTableView();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Number Format Error");
         }
     }
 
-    /**
-     * Helps setup the table view with number of columns, and their titles.
-     * Also sets background colors of cells depending on the value in the cell
-     * and adds the users data to the tableview.
-     */
-    private void setupTableView() {
-        setColumnCellFactory();
-        addDataToTableView();
+    @Override
+    public void updateCell(TableCell tableCell, Object object, int columnIndex) {
+        System.out.println("Updating Cell");
+        Number number = (Number)object;
+        handleCellColoring(tableCell, number, columnIndex);
+    }
+
+    @Override
+    public int minWidthForCell(int columnIndex) {
+        if (columnIndex == 0) {
+            return 45;
+        }
+        return 85;
+    }
+
+    @Override
+    public String[] titlesForColumns() {
+        System.out.println("Calling For Titles");
+        return new String[] {"Age", "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%"};
     }
 
     public User getUser() {

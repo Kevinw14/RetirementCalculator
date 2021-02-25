@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public class ROI implements Serializable {
 
-    private final int[] investmentReturns;
+    private final Integer[] investmentReturns;
     private final int annualContribution;
 
     /**
@@ -32,7 +32,7 @@ public class ROI implements Serializable {
         this.annualContribution = annualContribution;
 
         int COLUMN_SIZE = 16;
-        int[] investmentReturns = new int[COLUMN_SIZE];
+        Integer[] investmentReturns = new Integer[COLUMN_SIZE];
 
         investmentReturns[0] = age;
 
@@ -63,7 +63,7 @@ public class ROI implements Serializable {
         return (int)((yearBeforeReturn + annualContribution) * (1 + convertedPercent));
     }
 
-    public int[] getInvestmentReturns() {
+    public Integer[] getInvestmentReturns() {
         return investmentReturns;
     }
 }

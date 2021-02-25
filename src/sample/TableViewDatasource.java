@@ -11,8 +11,8 @@ package sample;
 
 import javafx.scene.control.TableCell;
 
-public interface TableViewDatasource {
-    void updateCell(TableCell<int[], Number> tableCell, Number number, int columnIndex);
+public interface TableViewDatasource<T> {
+    void updateCell(TableCell<T, ?> tableCell, Object object, int columnIndex);
     int minWidthForCell(int columnIndex);
     String[] titlesForColumns();
 }

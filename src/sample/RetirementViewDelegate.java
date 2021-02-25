@@ -4,8 +4,8 @@
  */
 package sample;
 
+import javafx.event.ActionEvent;
+
 public interface RetirementViewDelegate {
-    void calculateButtonPressed();
-    void saveButtonPressed();
-    void loadButtonPressed();
+    void calculateButtonPressed(ActionEvent event);
 }

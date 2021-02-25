@@ -13,6 +13,7 @@
 package sample;
 
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -28,14 +29,16 @@ public class RetirementCalculatorView extends FlowPane {
     private final Button saveButton;
     private final Button loadButton;
 
-    private final TableView<int[]> tableView;
+    private final RetirementTableView<Integer> tableView;
+
+    private RetirementViewDelegate delegate;
 
     /**
      * Initalizes Labels, TextFields, Button, and Tableview that is needed to display information
      * and take in user input.
      * FlowPanes are initialized and Labels and TextFields are added. FlowPanes are then added to the view itself.
      */
-    public RetirementCalculatorView(String[] titles) {
+    public RetirementCalculatorView() {
 
         //Initialization of all the UI elements.
         Label ageLabel = new Label("Age");
@@ -51,8 +54,10 @@ public class RetirementCalculatorView extends FlowPane {
         saveButton = new Button("Save");
         loadButton = new Button("Load");
 
-        tableView = new TableView<>();
-        setupColumns(titles);
+        //Sets the action of the calculate button that calls the delegate method.
+        calculateButton.setOnAction(this::calculateButtonPressed);
+
+        tableView = new RetirementTableView<>();
 
         //Disables the row highlight when a tableview cells was clicked.
         tableView.setSelectionModel(null);
@@ -89,6 +94,17 @@ public class RetirementCalculatorView extends FlowPane {
         this.getChildren().add(tableView);
     }
 
+    /**
+     * Gets data from all TextFields, creates a new User object with data, and updates
+     * the table view with the calculated data. When calculated it will save the User
+     * to the file system.
+     *
+     * @param event Event object that is passed in when the button is pressed.
+     */
+    public void calculateButtonPressed(ActionEvent event) {
+        delegate.calculateButtonPressed(event);
+    }
+
     public TextField getRetirementSavingsTextField() {
         return retirementSavingsTextField;
     }
@@ -109,7 +125,7 @@ public class RetirementCalculatorView extends FlowPane {
         return calculateButton;
     }
 
-    public TableView<int[]> getTableView() {
+    public RetirementTableView<Integer> getTableView() {
         return tableView;
     }
 
@@ -119,5 +135,9 @@ public class RetirementCalculatorView extends FlowPane {
 
     public Button getLoadButton() {
         return loadButton;
+    }
+
+    public void setDelegate(RetirementViewDelegate delegate) {
+        this.delegate = delegate;
     }
 }

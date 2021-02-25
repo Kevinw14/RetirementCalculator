@@ -28,8 +28,7 @@ public class RetirementCalculatorDriver extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        String[] titles = {"Age", "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%"};
-        RetirementCalculatorView view = new RetirementCalculatorView(titles);
+        RetirementCalculatorView view = new RetirementCalculatorView();
         FileHandler<User> handler = new FileHandler<>();
         Controller controller;
 

@@ -1,7 +1,7 @@
 package sample;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -9,7 +9,9 @@ public class RetirementTableView<T> extends TableView<T[]> {
 
     TableViewDatasource datasource;
 
-    public RetirementTableView() {}
+    public RetirementTableView() {
+        super();
+    }
 
     /**
      * Creates n number of columns depending on how many titles were given.
@@ -25,6 +27,8 @@ public class RetirementTableView<T> extends TableView<T[]> {
             TableColumn<T[], ?> column = new TableColumn<>(titles[i]);
             column.setMinWidth(datasource.minWidthForCell(i)); // Calls delegate method to set size of cell width
             final int columnIndex = i;
+
+
             column.setCellValueFactory(cellData -> {
                 T[] row = cellData.getValue();
                 return new SimpleObjectProperty(row[columnIndex]);
@@ -32,6 +36,26 @@ public class RetirementTableView<T> extends TableView<T[]> {
 
             this.getColumns().add(column);
             columns[i] = column;
+        }
+
+        setColumnCellFactory();
+    }
+
+    /**
+     * Gets each cell in each column and updates the coloring of each cell depending
+     * on the investment return.
+     */
+    private void setColumnCellFactory() {
+        for (int i = 0; i < this.getColumns().size(); i++) {
+            TableColumn<T[], ?> column = this.getColumns().get(i);
+            final int columnIndex = i;
+            column.setCellFactory(tableCell -> new TableCell() {
+                @Override
+                protected void updateItem(Object object, boolean isEmpty) {
+                    super.updateItem(object, isEmpty);
+                    datasource.updateCell(this, object, columnIndex);
+                }
+            });
         }
     }
 
