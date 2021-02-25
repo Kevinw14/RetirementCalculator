@@ -21,7 +21,7 @@ import javafx.scene.control.TableView;
 
 public class RetirementTableView<T> extends TableView<T[]> {
 
-    private TableViewDatasource<T> datasource;
+    private TableViewDatasource<T> datasource; // Datasource variable that will be set by the controller that conforms to TableViewDatasource.
 
     public RetirementTableView() {
         super();
@@ -70,22 +70,29 @@ public class RetirementTableView<T> extends TableView<T[]> {
                 }
             });
         }
-
-//        addData();
     }
 
+    /**
+     * Updates the table view with the new data that was calculated.
+     * It will clear the tableview of data thats currently displayed
+     * and will update it with the new data.
+     */
     public void update() {
         this.getItems().clear();
-        setupColumns();
+        addData();
     }
 
-//    private void addData() {
-//        for (int i = 0; i < datasource.numberOfRows(); i++) {
-//            if (datasource.addData(i) != null) {
-//                this.getItems().add(datasource.addData(i));
-//            }
-//        }
-//    }
+    /**
+     * Adds data returned to the tableview. if data is not null
+     * it will add it to the table view.
+     */
+    private void addData() {
+        for (int i = 0; i < datasource.numberOfRows(); i++) {
+            if (datasource.addData(i) != null) {
+                this.getItems().add(datasource.addData(i));
+            }
+        }
+    }
 
     public void setDatasource(TableViewDatasource datasource) {
         this.datasource = datasource;

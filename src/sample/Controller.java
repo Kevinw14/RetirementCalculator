@@ -11,7 +11,7 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TableCell;
 
-public class Controller implements TableViewDatasource, RetirementViewDelegate {
+public class Controller implements TableViewDatasource<Integer>, RetirementViewDelegate {
 
     private final RetirementCalculatorView view;
     private User user;
@@ -28,7 +28,7 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
             this.view.getRetirementSavingsTextField().setText("" + this.user.getRetirementSavings());
             this.view.getTargetSavingForRetirementTextField().setText("" + this.user.getTargetSavingsForRetirement());
         }
-        updateTableView();
+        view.getTableView().update();
     }
 
     /**
@@ -42,16 +42,6 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
         this.view.setDelegate(this);
         this.view.getTableView().setDatasource(this);
         setupView();
-    }
-
-    /**
-     * Clears the table whenever a new calculation is made.
-     * gets the users calculated return on investments then adds
-     * the return on investments to the tableview
-     */
-    private void updateTableView() {
-        view.getTableView().getItems().clear();
-        addDataToTableView();
     }
 
     /**
@@ -85,6 +75,8 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
     }
 
     /**
+     * Datasource Method
+     *
      * Handles checking the investment return and deciding if it's within 10% or over the target value.
      * If it's over the target it will change the background color of the cell to green.
      * If it's within 10% of the target it will change the background to yellow.
@@ -129,35 +121,42 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
         }
     }
 
-//    @Override
-//    public int numberOfRows() {
-//        if (user != null) {
-//            return user.getReturnOnInvestments().length;
-//        }
-//
-//        return 0;
-//    }
-//
-//    @Override
-//    public Object[] addData(int index) {
-//        return new Object[0];
-//    }
-
     /**
-     * Checks if there was a user saved and passed into the Controller.
-     * If there is one it will get the users saved investment returns and adds
-     * them to the table view.
+     * Datasource Method
+     *
+     * Uses the number returned to create that many rows.
+     *
+     * @return Number of rows needed to be created
      */
-    private void addDataToTableView() {
+    @Override
+    public int numberOfRows() {
         if (user != null) {
-            ROI[] returnOnInvestments = user.getReturnOnInvestments();
-            for (ROI returnOnInvestment : returnOnInvestments) {
-                view.getTableView().getItems().add(returnOnInvestment.getInvestmentReturns());
-            }
+            return user.getReturnOnInvestments().length;
         }
+
+        return 0;
     }
 
     /**
+     * Datasource Method
+     *
+     * Gets the users investment returns for that row and returns them
+     * to be displayed in the tableview.
+     *
+     * @param index index at that current position in the row
+     */
+    @Override
+    public Integer[] addData(int index) {
+        if (user != null) {
+            return user.getReturnOnInvestments()[index].getInvestmentReturns();
+        }
+
+        return null;
+    }
+
+    /**
+     * Delegate Method
+     *
      * Gets data from all TextFields, creates a new User object with data, and updates
      * the table view with the calculated data. When calculated it will save the User
      * to the file system.
@@ -166,7 +165,6 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
      */
     @Override
     public void calculateButtonPressed(ActionEvent event) {
-        System.out.println("Calculate Button Pressed");
         try {
             int age = Integer.parseInt(view.getAgeTextField().getText());
             int retirementSavings = Integer.parseInt(view.getRetirementSavingsTextField().getText());
@@ -175,7 +173,7 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
 
 
             this.user = new User(age, retirementSavings, annualSavings, targetSavings);
-            updateTableView();
+            view.getTableView().update();
 
         } catch (NumberFormatException e) {
             System.out.println("Number Format Error");
@@ -183,6 +181,8 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
     }
 
     /**
+     * Datasource Method
+     *
      * Called for each cell in the table view. Can perform styling to table cell,
      * and add values to the cell.;
      *
@@ -197,6 +197,8 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
     }
 
     /**
+     * Datasource Method
+     *
      * Uses the array of Strings to create that many columns, also sets the
      * array of titles to the titles of each column.
      *
@@ -207,9 +209,7 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
         return new String[] {"Age", "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%"};
     }
 
-    public User getUser() {
-        return user;
-    }
+    public User getUser() { return user; }
 
     public void setUser(User user) {
         this.user = user;
