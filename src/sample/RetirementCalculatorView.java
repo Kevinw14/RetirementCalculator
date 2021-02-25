@@ -12,7 +12,6 @@
  */
 package sample;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -119,10 +118,6 @@ public class RetirementCalculatorView extends FlowPane {
 
     public TextField getTargetSavingForRetirementTextField() {
         return targetSavingForRetirementTextField;
-    }
-
-    public Button getCalculateButton() {
-        return calculateButton;
     }
 
     public RetirementTableView<Integer> getTableView() {

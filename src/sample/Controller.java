@@ -1,5 +1,7 @@
 /**
- * Controller class handles setting up the table view with data from the User object.
+ * Controller class that handles setting up the table view with data from the User object.
+ * Conforms to TableViewDatasource and RetirementViewDelegate for the view to communicate
+ * to the controller to calculate User's investment returns and update the view.
  *
  * @author Kevin Wood
  * @version 1.0
@@ -8,7 +10,6 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
 
 public class Controller implements TableViewDatasource, RetirementViewDelegate {
 
@@ -128,6 +129,20 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
         }
     }
 
+//    @Override
+//    public int numberOfRows() {
+//        if (user != null) {
+//            return user.getReturnOnInvestments().length;
+//        }
+//
+//        return 0;
+//    }
+//
+//    @Override
+//    public Object[] addData(int index) {
+//        return new Object[0];
+//    }
+
     /**
      * Checks if there was a user saved and passed into the Controller.
      * If there is one it will get the users saved investment returns and adds
@@ -141,16 +156,6 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
             }
         }
     }
-
-//    /**
-//     * Helps setup the table view with number of columns, and their titles.
-//     * Also sets background colors of cells depending on the value in the cell
-//     * and adds the users data to the tableview.
-//     */
-//    private void setupTableView() {
-//        setColumnCellFactory();
-//        addDataToTableView();
-//    }
 
     /**
      * Gets data from all TextFields, creates a new User object with data, and updates
@@ -177,24 +182,28 @@ public class Controller implements TableViewDatasource, RetirementViewDelegate {
         }
     }
 
+    /**
+     * Called for each cell in the table view. Can perform styling to table cell,
+     * and add values to the cell.;
+     *
+     * @param tableCell tableCell that is currently being passed in.
+     * @param object object that is in that cell
+     * @param columnIndex Index the column is in currently
+     */
     @Override
     public void updateCell(TableCell tableCell, Object object, int columnIndex) {
-        System.out.println("Updating Cell");
         Number number = (Number)object;
         handleCellColoring(tableCell, number, columnIndex);
     }
 
-    @Override
-    public int minWidthForCell(int columnIndex) {
-        if (columnIndex == 0) {
-            return 45;
-        }
-        return 85;
-    }
-
+    /**
+     * Uses the array of Strings to create that many columns, also sets the
+     * array of titles to the titles of each column.
+     *
+     * @return An array of Strings that are the titles of the columns
+     */
     @Override
     public String[] titlesForColumns() {
-        System.out.println("Calling For Titles");
         return new String[] {"Age", "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%"};
     }
 

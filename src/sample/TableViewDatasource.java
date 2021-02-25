@@ -13,6 +13,7 @@ import javafx.scene.control.TableCell;
 
 public interface TableViewDatasource<T> {
     void updateCell(TableCell<T, ?> tableCell, Object object, int columnIndex);
-    int minWidthForCell(int columnIndex);
+//    T[] addData(int index);
+//    int numberOfRows();
     String[] titlesForColumns();
 }

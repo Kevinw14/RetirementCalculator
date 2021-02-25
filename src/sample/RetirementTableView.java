@@ -1,3 +1,17 @@
+/**
+ * TableView class that has been simplified to add titles, customized cells
+ * and add data to table view.
+ *
+ * RetirementTableView has a datasource variable and your controller
+ * will have to conform to TableViewDatasource interface to setup the
+ * tableview and add data.
+ *
+ * Don't forget to set the datasource to the controller conforming to the
+ * interface.
+ *
+ * @author Kevin Wood
+ * @version 1.0
+ */
 package sample;
 
 import javafx.beans.property.SimpleObjectProperty;
@@ -7,7 +21,7 @@ import javafx.scene.control.TableView;
 
 public class RetirementTableView<T> extends TableView<T[]> {
 
-    TableViewDatasource datasource;
+    private TableViewDatasource<T> datasource;
 
     public RetirementTableView() {
         super();
@@ -25,7 +39,6 @@ public class RetirementTableView<T> extends TableView<T[]> {
         //Sets up table views column names and determining what value goes into cells
         for (int i = 0; i < titles.length; i++) {
             TableColumn<T[], ?> column = new TableColumn<>(titles[i]);
-            column.setMinWidth(datasource.minWidthForCell(i)); // Calls delegate method to set size of cell width
             final int columnIndex = i;
 
 
@@ -57,7 +70,22 @@ public class RetirementTableView<T> extends TableView<T[]> {
                 }
             });
         }
+
+//        addData();
     }
+
+    public void update() {
+        this.getItems().clear();
+        setupColumns();
+    }
+
+//    private void addData() {
+//        for (int i = 0; i < datasource.numberOfRows(); i++) {
+//            if (datasource.addData(i) != null) {
+//                this.getItems().add(datasource.addData(i));
+//            }
+//        }
+//    }
 
     public void setDatasource(TableViewDatasource datasource) {
         this.datasource = datasource;
