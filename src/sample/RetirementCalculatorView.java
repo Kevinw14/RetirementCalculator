@@ -24,13 +24,12 @@ public class RetirementCalculatorView extends FlowPane {
     private final TextField annualRetirementInvestmentTextField;
     private final TextField targetSavingForRetirementTextField;
 
-    private final Button calculateButton;
     private final Button saveButton;
     private final Button loadButton;
 
     private final RetirementTableView<Integer> tableView;
 
-    private RetirementViewDelegate delegate;
+    private RetirementViewDelegate delegate; // Delegate used to relay messages to controller when calculated button is pressed.
 
     /**
      * Initalizes Labels, TextFields, Button, and Tableview that is needed to display information
@@ -49,7 +48,7 @@ public class RetirementCalculatorView extends FlowPane {
         annualRetirementInvestmentTextField = new TextField();
         targetSavingForRetirementTextField = new TextField();
 
-        calculateButton = new Button("Calculate");
+        Button calculateButton = new Button("Calculate");
         saveButton = new Button("Save");
         loadButton = new Button("Load");
 
@@ -94,13 +93,12 @@ public class RetirementCalculatorView extends FlowPane {
     }
 
     /**
-     * Gets data from all TextFields, creates a new User object with data, and updates
-     * the table view with the calculated data. When calculated it will save the User
-     * to the file system.
+     * Sends a delegate message to the controller when the calculated
+     * button is pressed.
      *
      * @param event Event object that is passed in when the button is pressed.
      */
-    public void calculateButtonPressed(ActionEvent event) {
+    private void calculateButtonPressed(ActionEvent event) {
         delegate.calculateButtonPressed(event);
     }
 

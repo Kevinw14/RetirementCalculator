@@ -34,6 +34,7 @@ public class RetirementCalculatorDriver extends Application {
 
         controller = new Controller(view);
 
+        // Opens file system to choose a file to load.
         view.getLoadButton().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 try {
@@ -49,6 +50,7 @@ public class RetirementCalculatorDriver extends Application {
             }
         });
 
+        // Opens the file system to choose or create a file to save to.
         view.getSaveButton().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 try {

@@ -23,14 +23,9 @@ public class RetirementTableView<T> extends TableView<T[]> {
 
     private TableViewDatasource<T> datasource; // Datasource variable that will be set by the controller that conforms to TableViewDatasource.
 
-    public RetirementTableView() {
-        super();
-    }
-
     /**
-     * Creates n number of columns depending on how many titles were given.
-     * It then goes through the columns and sets the minimum width and sets the value factory to each cell.
-     * It then calls setCellFactory with the columns that was made and handles coloring of the cells;
+     * Uses the data given by the controller to set up the table views columns
+     * with titles and what type of value will be placed in each cell.
      */
     private void setupColumns() {
         String[] titles = datasource.titlesForColumns();
@@ -40,8 +35,6 @@ public class RetirementTableView<T> extends TableView<T[]> {
         for (int i = 0; i < titles.length; i++) {
             TableColumn<T[], ?> column = new TableColumn<>(titles[i]);
             final int columnIndex = i;
-
-
             column.setCellValueFactory(cellData -> {
                 T[] row = cellData.getValue();
                 return new SimpleObjectProperty(row[columnIndex]);
@@ -55,8 +48,8 @@ public class RetirementTableView<T> extends TableView<T[]> {
     }
 
     /**
-     * Gets each cell in each column and updates the coloring of each cell depending
-     * on the investment return.
+     * Gets each cell in each column and calls datasource method
+     * to update the cells value, or styling.
      */
     private void setColumnCellFactory() {
         for (int i = 0; i < this.getColumns().size(); i++) {
@@ -74,7 +67,7 @@ public class RetirementTableView<T> extends TableView<T[]> {
 
     /**
      * Updates the table view with the new data that was calculated.
-     * It will clear the tableview of data thats currently displayed
+     * It will clear the tableview of data that's currently displayed
      * and will update it with the new data.
      */
     public void update() {

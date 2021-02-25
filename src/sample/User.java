@@ -70,7 +70,7 @@ public class User implements Serializable {
 
     /**
      * Returns an int that is the amount of time in years from the age of the user until the age of 72.
-     * This int is then used to create n number of rows for the table.
+     * This int is then used to create n number ROI's needed to show their investment returns.
      *
      * @return An int of the amount of time in years until 72 from the user's given age.
      */
@@ -79,7 +79,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Uses the interest rate and the amount made last year under that interest rate to calculate your
+     * Uses the interest rate and the amount made last year to calculate your
      * return on investment for this year.
      *
      * @param percentRate The interest rate on the return

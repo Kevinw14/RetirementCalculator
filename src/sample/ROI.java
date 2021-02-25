@@ -52,7 +52,7 @@ public class ROI implements Serializable {
     /**
      * Formula used to calculate how much money you will make
      * at a certain interest rate percentage from the contribution
-     * made this year and the amount you made last year under the same interest rate.
+     * made this year and the amount they made last year under the same interest rate.
      *
      * @param percentRate The interest rate that is used
      * @param yearBeforeReturn The return on investment value from the year before

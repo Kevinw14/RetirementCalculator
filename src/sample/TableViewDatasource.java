@@ -1,7 +1,7 @@
 /**
  * Datasource interface that handles with updating Tableview
- * with titles, places values in cells and setting styles to
- * cells.
+ * with titles, number of rows needed to create, adding the
+ * data to the tableview and setting styles to cells.
  *
  * @author Kevin Wood
  * @version 1.0

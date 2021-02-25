@@ -23,8 +23,9 @@ public class FileHandler<T> {
     private final FileChooser fileChooser;
 
     /**
-     * Creates a FileHandler object and initializes a File object
-     * with the given path string.
+     * Creates a FileHandler object and initializes
+     * a FileChooser object that only allows .ser files
+     * to be loaded.
      *
      */
     public FileHandler() {
@@ -40,7 +41,7 @@ public class FileHandler<T> {
      * @throws IOException Throws if you attempt to read a file that's no longer available.
      * @throws ClassNotFoundException Throws if class can not be loaded from it's class path.
      */
-//    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public T load(Stage stage) throws IOException, ClassNotFoundException, NullPointerException {
 
         fileChooser.setTitle("Open");

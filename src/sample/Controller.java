@@ -19,7 +19,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     /**
      * If a user was saved to the file system, it will update
      * the view with the data the user has in their respectable
-     * TextFields on load.
+     * TextFields.
      */
     private void setupView() {
         if (user != null) {
@@ -32,8 +32,8 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     }
 
     /**
-     * View is passed in and the calculated button's action gets set
-     * with the calculate action. Then the tableview is setup with no data.
+     * View is passed in. The tableview gets setup with correct columns
+     * but no data will be presented.
      *
      * @param view View that will update with the calculated information
      */
@@ -84,9 +84,8 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      * @param tableCell        The tableview cell that will be updated
      * @param investmentReturn The investment return for that particular cell that is
      *                         used to check if it's within 10% or over the target amount.
-     * @param columnIndex      The column index passed in is used to determine if the loop is
-     *                         int the age column. If it's in any one of the columns except age
-     *                         it will add a '$' to the investment return
+     * @param columnIndex      The column index passed in is used to determine which column it is currently
+     *                         looping through.
      */
     private void handleCellColoring(TableCell<int[], Number> tableCell, Number investmentReturn, int columnIndex) {
         // Checks if the investment return is over the target amount. Will be green if true
@@ -108,7 +107,19 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
             String white = "#FFFFFF";
             tableCell.setStyle("-fx-background-color: " + white);
         }
+    }
 
+    /**
+     * Handles setting the investment return value in the cell and adding a $ if it's in the
+     * correct column.
+     *
+     * @param tableCell        The tableview cell that will be updated
+     * @param investmentReturn The investment return for that particular cell that is
+     *                         used to enter the value into the cell.
+     * @param columnIndex      The column index passed in is used to determine which column it is currently
+     *                         looping through.
+     */
+    private void handleFontStyling(TableCell<int[], Number> tableCell, Number investmentReturn, int columnIndex) {
         // Fixes a visual bug that would put null in the cell when no value was present.
         if (investmentReturn != null) {
             if (columnIndex == 0) {
@@ -120,11 +131,10 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
             tableCell.setText("");
         }
     }
-
     /**
      * Datasource Method
      *
-     * Uses the number returned to create that many rows.
+     * Uses the number returned to create that n number of rows.
      *
      * @return Number of rows needed to be created
      */
@@ -158,8 +168,10 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      * Delegate Method
      *
      * Gets data from all TextFields, creates a new User object with data, and updates
-     * the table view with the calculated data. When calculated it will save the User
-     * to the file system.
+     * the table view with the calculated data.
+     *
+     * Will throw a NumberFormatException if TextFields are empty or a
+     * non numeric character was entered.
      *
      * @param event Event object that is passed in when the button is pressed.
      */
@@ -194,12 +206,13 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     public void updateCell(TableCell tableCell, Object object, int columnIndex) {
         Number number = (Number)object;
         handleCellColoring(tableCell, number, columnIndex);
+        handleFontStyling(tableCell, number, columnIndex);
     }
 
     /**
      * Datasource Method
      *
-     * Uses the array of Strings to create that many columns, also sets the
+     * Uses the array of Strings to create n number of columns, also sets the
      * array of titles to the titles of each column.
      *
      * @return An array of Strings that are the titles of the columns
