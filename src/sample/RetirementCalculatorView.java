@@ -89,34 +89,6 @@ public class RetirementCalculatorView extends FlowPane {
         this.getChildren().add(tableView);
     }
 
-    /**
-     * Creates n number of columns depending on how many titles were given.
-     * It then goes through the columns and sets the minimum width and sets the value factory to each cell.
-     * It then calls setCellFactory with the columns that was made and handles coloring of the cells;
-     */
-    private void setupColumns(String[] titles) {
-        TableColumn<int[], Number>[] columns = new TableColumn[titles.length];
-
-        //Sets up table views column names and determining what value goes into cells
-        for (int i = 0; i < titles.length; i++) {
-            TableColumn<int[], Number> column = new TableColumn<>(titles[i]);
-            if (i == 0) {
-                column.setMinWidth(40);
-            } else {
-                column.setMinWidth(85);
-            }
-            final int columnIndex = i;
-            column.setCellValueFactory(cellData -> {
-                int[] row = cellData.getValue();
-                final SimpleIntegerProperty simpleIntegerProperty = new SimpleIntegerProperty(row[columnIndex]);
-                return simpleIntegerProperty;
-            });
-
-            tableView.getColumns().add(column);
-            columns[i] = column;
-        }
-    }
-
     public TextField getRetirementSavingsTextField() {
         return retirementSavingsTextField;
     }
