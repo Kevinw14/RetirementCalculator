@@ -35,20 +35,20 @@ public class RetirementCalculatorDriver extends Application {
 
         controller = new Controller(view);
 
-        view.getLoadButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                try {
-                    User user = handler.load(primaryStage);
-                    controller.setUser(user);
-                } catch (IOException e) {
-                    System.out.println("IO Load Exception");
-                } catch (ClassNotFoundException e) {
-                    System.out.println("Class Not Found Exception");
-                } catch (NullPointerException e) {
-                    System.out.println("Null Load Exception");
-                }
-            }
-        });
+//        view.getLoadButton().setOnAction(new EventHandler<ActionEvent>() {
+//            public void handle(ActionEvent event) {
+//                try {
+//                    User user = handler.load(primaryStage);
+//                    controller.setUser(user);
+//                } catch (IOException e) {
+//                    System.out.println("IO Load Exception");
+//                } catch (ClassNotFoundException e) {
+//                    System.out.println("Class Not Found Exception");
+//                } catch (NullPointerException e) {
+//                    System.out.println("Null Load Exception");
+//                }
+//            }
+//        });
 
         view.getSaveButton().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
