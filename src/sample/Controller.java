@@ -1,3 +1,8 @@
+package sample;
+
+import javafx.event.ActionEvent;
+import javafx.scene.control.TableCell;
+
 /**
  * Controller class that handles setting up the table view with data from the User object.
  * Conforms to TableViewDatasource and RetirementViewDelegate for the view to communicate
@@ -6,11 +11,6 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import javafx.event.ActionEvent;
-import javafx.scene.control.TableCell;
-
 public class Controller implements TableViewDatasource<Integer>, RetirementViewDelegate {
 
     private final RetirementCalculatorView view;
@@ -57,7 +57,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      * Within 10%: $900,000+
      */
     private boolean isWithinTen(Number investmentReturn) {
-        double tenPercent = user.getTargetSavingsForRetirement() / 10;
+        double tenPercent = user.getTargetSavingsForRetirement() / 10.0;
         double bareMinimum = user.getTargetSavingsForRetirement() - tenPercent;
 
         return investmentReturn.intValue() >= bareMinimum && investmentReturn.intValue() < user.getTargetSavingsForRetirement();
@@ -84,10 +84,8 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      * @param tableCell        The tableview cell that will be updated
      * @param investmentReturn The investment return for that particular cell that is
      *                         used to check if it's within 10% or over the target amount.
-     * @param columnIndex      The column index passed in is used to determine which column it is currently
-     *                         looping through.
      */
-    private void handleCellColoring(TableCell<int[], Number> tableCell, Number investmentReturn, int columnIndex) {
+    private void handleCellColoring(TableCell<Integer, ?> tableCell, Number investmentReturn) {
         // Checks if the investment return is over the target amount. Will be green if true
         if (investmentReturn != null && isOver(investmentReturn)) {
             String aeroBlue = "#D0F4DE";
@@ -119,7 +117,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      * @param columnIndex      The column index passed in is used to determine which column it is currently
      *                         looping through.
      */
-    private void handleFontStyling(TableCell<int[], Number> tableCell, Number investmentReturn, int columnIndex) {
+    private void handleFontStyling(TableCell<Integer, ?> tableCell, Number investmentReturn, int columnIndex) {
         // Fixes a visual bug that would put null in the cell when no value was present.
         if (investmentReturn != null) {
             if (columnIndex == 0) {
@@ -183,12 +181,12 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
             int targetSavings = Integer.parseInt(view.getTargetSavingForRetirementTextField().getText());
             int annualSavings = Integer.parseInt(view.getAnnualRetirementInvestmentTextField().getText());
 
+            view.getErrorLabel().setText("");
 
             this.user = new User(age, retirementSavings, annualSavings, targetSavings);
             view.getTableView().update();
-
         } catch (NumberFormatException e) {
-            System.out.println("Number Format Error");
+            view.getErrorLabel().setText("Please enter valid numerical characters");
         }
     }
 
@@ -197,16 +195,15 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      *
      * Called for each cell in the table view. Can perform styling to table cell,
      * and add values to the cell.;
-     *
-     * @param tableCell tableCell that is currently being passed in.
+     *  @param tableCell tableCell that is currently being passed in.
      * @param object object that is in that cell
      * @param columnIndex Index the column is in currently
      */
     @Override
-    public void updateCell(TableCell tableCell, Object object, int columnIndex) {
-        Number number = (Number)object;
-        handleCellColoring(tableCell, number, columnIndex);
-        handleFontStyling(tableCell, number, columnIndex);
+    public void updateCell(TableCell<Integer, ?> tableCell, Object object, int columnIndex) {
+        Number investmentReturn = (Number)object;
+        handleCellColoring(tableCell, investmentReturn);
+        handleFontStyling(tableCell, investmentReturn, columnIndex);
     }
 
     /**

@@ -1,3 +1,7 @@
+package sample;
+
+import javafx.scene.control.TableCell;
+
 /**
  * Datasource interface that handles with updating Tableview
  * with titles, number of rows needed to create, adding the
@@ -6,11 +10,6 @@
  * @author Kevin Wood
  * @version 1.0
  */
-
-package sample;
-
-import javafx.scene.control.TableCell;
-
 public interface TableViewDatasource<T> {
     void updateCell(TableCell<T, ?> tableCell, Object object, int columnIndex);
     T[] addData(int index);

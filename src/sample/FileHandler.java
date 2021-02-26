@@ -1,3 +1,10 @@
+package sample;
+
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.*;
+
 /**
  * FileHandler class allows an application to write an object
  * and it's data to a file and read the file back into objects.
@@ -10,14 +17,6 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.scene.control.Menu;
-
-import java.io.*;
-
 public class FileHandler<T> {
 
     private final FileChooser fileChooser;
@@ -63,7 +62,7 @@ public class FileHandler<T> {
      * @param object The serialized object that will be written to the file.
      * @throws IOException Throws if the streams was closed before writing was finished.
      */
-    public void save(Stage stage, T object) throws IOException{
+    public void save(Stage stage, T object) throws IOException, NullPointerException {
 
         fileChooser.setTitle("Save");
         File file = fileChooser.showSaveDialog(stage);

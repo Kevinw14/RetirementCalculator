@@ -1,3 +1,11 @@
+package sample;
+
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
+
 /**
  * RetirementCalcView class sets up a view that gets input from user about their retirement savings
  * and will display the calculations in a table view. The view will display return on investments from
@@ -10,14 +18,9 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.FlowPane;
-
 public class RetirementCalculatorView extends FlowPane {
+
+    private final Label errorLabel;
 
     private final TextField ageTextField;
     private final TextField retirementSavingsTextField;
@@ -43,6 +46,9 @@ public class RetirementCalculatorView extends FlowPane {
         Label retirementSavingsLabel = new Label("Retirement Savings");
         Label annualRetirementInvestmentLabel = new Label("Annual Retirement Investment");
         Label targetSavingForRetirementLabel = new Label("Target Savings For Retirement");
+        errorLabel = new Label("");
+        errorLabel.setTextFill(Color.web("#f25c54"));
+
         ageTextField = new TextField();
         retirementSavingsTextField = new TextField();
         annualRetirementInvestmentTextField = new TextField();
@@ -78,6 +84,8 @@ public class RetirementCalculatorView extends FlowPane {
         FlowPane fileManagementPane = new FlowPane(saveButton, loadButton);
         fileManagementPane.setHgap(20);
         fileManagementPane.setAlignment(Pos.CENTER);
+        FlowPane errorPane = new FlowPane(errorLabel);
+        errorPane.setAlignment(Pos.CENTER);
 
         //Adds FlowPanes to itself.
         this.setAlignment(Pos.TOP_CENTER);
@@ -90,6 +98,7 @@ public class RetirementCalculatorView extends FlowPane {
         this.getChildren().add(targetSavingsPane);
         this.getChildren().add(buttonPane);
         this.getChildren().add(tableView);
+        this.getChildren().add(errorPane);
     }
 
     /**
@@ -129,6 +138,8 @@ public class RetirementCalculatorView extends FlowPane {
     public Button getLoadButton() {
         return loadButton;
     }
+
+    public Label getErrorLabel() { return errorLabel; }
 
     public void setDelegate(RetirementViewDelegate delegate) {
         this.delegate = delegate;

@@ -1,3 +1,11 @@
+package sample;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
 /**
  * Retirement Calculator application that takes input from the user
  * and calculates the return on investments at different interest rates
@@ -6,17 +14,6 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-
-import java.io.IOException;
-
 public class RetirementCalculatorDriver extends Application {
 
     /**
@@ -35,29 +32,24 @@ public class RetirementCalculatorDriver extends Application {
         controller = new Controller(view);
 
         // Opens file system to choose a file to load.
-        view.getLoadButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
+        view.getLoadButton().setOnAction(event -> {
                 try {
                     User user = handler.load(primaryStage);
                     controller.setUser(user);
                 } catch (IOException e) {
-                    System.out.println("IO Load Exception");
+                    view.getErrorLabel().setText("Error loading file " + e.toString());
                 } catch (ClassNotFoundException e) {
-                    System.out.println("Class Not Found Exception");
-                } catch (NullPointerException e) {
-                    System.out.println("Null Load Exception");
-                }
-            }
+                    view.getErrorLabel().setText("Error class was not found when loading user");
+                } catch (NullPointerException ignored) {}
         });
 
         // Opens the file system to choose or create a file to save to.
-        view.getSaveButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                try {
-                    handler.save(primaryStage, controller.getUser());
-                } catch (IOException e) {
-                    System.out.println("IO Save Exception");
-                }
+        view.getSaveButton().setOnAction(event -> {
+            try {
+                handler.save(primaryStage, controller.getUser());
+            } catch (IOException e) {
+                view.getErrorLabel().setText("Error saving file " + e.toString());
+            } catch (NullPointerException ignored) {
             }
         });
 

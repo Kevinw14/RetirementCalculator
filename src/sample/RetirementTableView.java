@@ -1,3 +1,10 @@
+package sample;
+
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
 /**
  * TableView class that has been simplified to add titles, customized cells
  * and add data to table view.
@@ -12,13 +19,6 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-
 public class RetirementTableView<T> extends TableView<T[]> {
 
     private TableViewDatasource<T> datasource; // Datasource variable that will be set by the controller that conforms to TableViewDatasource.
@@ -29,7 +29,6 @@ public class RetirementTableView<T> extends TableView<T[]> {
      */
     private void setupColumns() {
         String[] titles = datasource.titlesForColumns();
-        TableColumn<T[], ?>[] columns = new TableColumn[titles.length];
 
         //Sets up table views column names and determining what value goes into cells
         for (int i = 0; i < titles.length; i++) {
@@ -41,7 +40,6 @@ public class RetirementTableView<T> extends TableView<T[]> {
             });
 
             this.getColumns().add(column);
-            columns[i] = column;
         }
 
         setColumnCellFactory();
@@ -87,7 +85,7 @@ public class RetirementTableView<T> extends TableView<T[]> {
         }
     }
 
-    public void setDatasource(TableViewDatasource datasource) {
+    public void setDatasource(TableViewDatasource<T> datasource) {
         this.datasource = datasource;
         setupColumns();
     }

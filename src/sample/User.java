@@ -1,3 +1,7 @@
+package sample;
+
+import java.io.Serializable;
+
 /**
  * User class used to encapsulate data about their retirement.
  * Takes user's age, their amount already saved,
@@ -9,17 +13,13 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import java.io.Serializable;
-
 public class User implements Serializable {
 
     private final int age;
     private final int retirementSavings;
     private final int annualRetirementInvestment;
     private final int targetSavingForRetirement;
-    private ROI[] rois;
+    private final ROI[] rois;
 
     /**
      * Takes in the data needed to initialize a User object then calculates
@@ -56,13 +56,13 @@ public class User implements Serializable {
 
             int currentAge = age + accountAge;
 
+            ROI roi;
             if (accountAge == 0) {
-                ROI roi = new ROI(null, currentAge, annualRetirementInvestment, retirementSavings);
-                lifetimeInvestmentReturns[accountAge] = roi;
+                roi = new ROI(null, currentAge, annualRetirementInvestment, retirementSavings);
             } else {
-                ROI roi = new ROI(lifetimeInvestmentReturns[accountAge - 1], currentAge, annualRetirementInvestment, retirementSavings);
-                lifetimeInvestmentReturns[accountAge] = roi;
+                roi = new ROI(lifetimeInvestmentReturns[accountAge - 1], currentAge, annualRetirementInvestment, retirementSavings);
             }
+            lifetimeInvestmentReturns[accountAge] = roi;
         }
 
         return lifetimeInvestmentReturns;
@@ -76,20 +76,6 @@ public class User implements Serializable {
      */
     private int getLifetimeAccountAge() {
         return 73 - age;
-    }
-
-    /**
-     * Uses the interest rate and the amount made last year to calculate your
-     * return on investment for this year.
-     *
-     * @param percentRate The interest rate on the return
-     * @param yearBeforeReturn The value of the ROI the year before at the respected interest rate.
-     * @return An int Calculates the investment return with the given percentage, the year's before investment return
-     * and the annual contribution.
-     */
-    private int calculateInvestmentReturn(int percentRate, int yearBeforeReturn) {
-        double convertedPercent = (double)percentRate / 100;
-        return (int)((yearBeforeReturn + annualRetirementInvestment) * (1 + convertedPercent));
     }
 
     public int getAge() { return age; }

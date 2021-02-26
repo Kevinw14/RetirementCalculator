@@ -1,3 +1,7 @@
+package sample;
+
+import java.io.Serializable;
+
 /**
  * ROI class encapsulates data used to calculate return on investments
  * from 0% - 14% and stores those calculations and shows those returns with
@@ -6,10 +10,6 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import java.io.Serializable;
-
 public class ROI implements Serializable {
 
     private final Integer[] investmentReturns;

@@ -1,3 +1,7 @@
+package sample;
+
+import javafx.event.ActionEvent;
+
 /**
  * Delegate interface used to communicate from the
  * RetirementCalculatorView to the controller.
@@ -8,10 +12,6 @@
  * @author Kevin Wood
  * @version 1.0
  */
-package sample;
-
-import javafx.event.ActionEvent;
-
 public interface RetirementViewDelegate {
     void calculateButtonPressed(ActionEvent event);
 }
