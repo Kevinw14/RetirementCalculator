@@ -17,7 +17,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     private User user;
 
     /**
-     * If a user was saved to the file system, it will update
+     * Once a user is loaded in, it will update
      * the view with the data the user has in their respectable
      * TextFields.
      */
@@ -47,7 +47,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     /**
      * Determines if the amount given from a return on investment is within 10% of the target goal
      * but less than the target.
-     * <p>
+     *
      * This is used to determine if the cell background should be yellow or white.
      *
      * @param investmentReturn The amount that was made that year.
@@ -119,12 +119,10 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      */
     private void handleFontStyling(TableCell<Integer, ?> tableCell, Number investmentReturn, int columnIndex) {
         // Fixes a visual bug that would put null in the cell when no value was present.
-        if (investmentReturn != null) {
-            if (columnIndex == 0) {
-                tableCell.setText(String.valueOf(investmentReturn));
-            } else {
-                tableCell.setText("$" + investmentReturn);
-            }
+        if (investmentReturn != null && columnIndex == 0) {
+            tableCell.setText(String.valueOf(investmentReturn));
+        } else if (investmentReturn != null && columnIndex != 0) {
+            tableCell.setText("$" + investmentReturn);
         } else {
             tableCell.setText("");
         }
@@ -194,8 +192,9 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      * Datasource Method
      *
      * Called for each cell in the table view. Can perform styling to table cell,
-     * and add values to the cell.;
-     *  @param tableCell tableCell that is currently being passed in.
+     * and add values to the cell.
+     *
+     * @param tableCell tableCell that is currently being passed in.
      * @param object object that is in that cell
      * @param columnIndex Index the column is in currently
      */
@@ -220,7 +219,6 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     }
 
     public User getUser() { return user; }
-
     public void setUser(User user) {
         this.user = user;
         setupView();

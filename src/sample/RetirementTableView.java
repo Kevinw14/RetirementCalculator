@@ -13,7 +13,7 @@ import javafx.scene.control.TableView;
  * will have to conform to TableViewDatasource interface to setup the
  * tableview and add data.
  *
- * Don't forget to set the datasource to the controller conforming to the
+ * Don't forget to set the datasource to the class conforming to the
  * interface.
  *
  * @author Kevin Wood
@@ -21,7 +21,7 @@ import javafx.scene.control.TableView;
  */
 public class RetirementTableView<T> extends TableView<T[]> {
 
-    private TableViewDatasource<T> datasource; // Datasource variable that will be set by the controller that conforms to TableViewDatasource.
+    private TableViewDatasource<T> datasource; // Datasource variable that will be set by the class that conforms to TableViewDatasource.
 
     /**
      * Uses the data given by the controller to set up the table views columns

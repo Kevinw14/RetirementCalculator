@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
  * RetirementCalcView class sets up a view that gets input from user about their retirement savings
  * and will display the calculations in a table view. The view will display return on investments from
  * current age until the retiring age of 72.
- * <p>
+ *
  * Tableview cells will change depending on how close you were to your target.
  * Yellow - Within 10% of target goal.
  * Green - Over your target goal.
@@ -114,33 +114,25 @@ public class RetirementCalculatorView extends FlowPane {
     public TextField getRetirementSavingsTextField() {
         return retirementSavingsTextField;
     }
-
     public TextField getAgeTextField() {
         return ageTextField;
     }
-
     public TextField getAnnualRetirementInvestmentTextField() {
         return annualRetirementInvestmentTextField;
     }
-
     public TextField getTargetSavingForRetirementTextField() {
         return targetSavingForRetirementTextField;
     }
-
     public RetirementTableView<Integer> getTableView() {
         return tableView;
     }
-
     public Button getSaveButton() {
         return saveButton;
     }
-
     public Button getLoadButton() {
         return loadButton;
     }
-
     public Label getErrorLabel() { return errorLabel; }
-
     public void setDelegate(RetirementViewDelegate delegate) {
         this.delegate = delegate;
     }

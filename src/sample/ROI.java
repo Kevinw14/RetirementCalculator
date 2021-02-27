@@ -42,7 +42,7 @@ public class ROI implements Serializable {
             }
         } else {
             for (int i = 1; i < COLUMN_SIZE; i++) {
-                investmentReturns[i] = calculateReturn(i, lastYearReturn.investmentReturns[i]);
+                investmentReturns[i] = calculateReturn(i - 1, lastYearReturn.investmentReturns[i]);
             }
         }
 

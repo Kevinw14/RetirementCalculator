@@ -10,14 +10,12 @@ import java.io.*;
  * and it's data to a file and read the file back into objects.
  *
  * FileHandler conforms to different types of objects through its generic.
- * as long as the object conforms to Serializable. If <T> doesn't conform to Serializable
- * FileHandler will throw an exception and not save to the file and will not create objects
- * on read.
+ * as long as the object conforms to Serializable.
  *
  * @author Kevin Wood
  * @version 1.0
  */
-public class FileHandler<T> {
+public class FileHandler<T extends Serializable> {
 
     private final FileChooser fileChooser;
 
