@@ -58,7 +58,7 @@ public class RetirementTableView<T> extends TableView<T[]> {
                 protected void updateItem(Object object, boolean isEmpty) {
                     super.updateItem(object, isEmpty);
                     datasource.updateCell(this, object, columnIndex);
-                    
+
                     if (onUpdate) {
                         String white = "#FFFFFF";
                         tableCell.setStyle("-fx-background-color: " + white);
@@ -75,15 +75,8 @@ public class RetirementTableView<T> extends TableView<T[]> {
      */
     public void update() {
         this.getItems().clear();
-        clearColumns();
+        setColumnCellFactory(true); // Fixes a bug where color would stay on the table with very few rows displaying.
         addData();
-    }
-
-    /**
-     *
-     */
-    private void clearColumns() {
-        setColumnCellFactory(true);
     }
 
     /**
