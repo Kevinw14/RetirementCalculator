@@ -47,7 +47,6 @@ public class User implements Serializable {
      */
     private ROI[] calculateROIS() {
 
-
         int lifetimeAccountAge = getLifetimeAccountAge();
 
         ROI[] lifetimeInvestmentReturns = new ROI[lifetimeAccountAge];
@@ -78,6 +77,40 @@ public class User implements Serializable {
         return 73 - age;
     }
 
+    /**
+     *
+     * In Model
+     *
+     * Determines if the amount given from a return on investment is within 10% of the target goal
+     * but less than the target.
+     *
+     * This is used to determine if the cell background should be yellow or white.
+     *
+     * @param investmentReturn The amount that was made that year.
+     * @return returns true if the given number is within 10% the target goal.
+     * Example
+     * Target: $1,000,000
+     * Within 10%: $900,000+
+     */
+    public boolean isWithinTen(Number investmentReturn) {
+        double tenPercent = targetSavingForRetirement / 10.0;
+        double bareMinimum = targetSavingForRetirement - tenPercent;
+
+        return investmentReturn.intValue() >= bareMinimum && investmentReturn.intValue() < targetSavingForRetirement;
+    }
+
+    /**
+     *
+     * In Model
+     * Determines if the amount given from a return on investment is at the target goal or over.
+     * This is used to determine if the cell background should be green or white.
+     *
+     * @param investmentReturn The amount that was made that year.
+     * @return returns true if the given number is at or over the target goal.
+     */
+    public boolean isOver(Number investmentReturn) {
+        return investmentReturn.intValue() >= targetSavingForRetirement;
+    }
     public int getAge() { return age; }
     public int getRetirementSavings() { return retirementSavings; }
     public int getAnnualRetirementInvestment() { return annualRetirementInvestment; }

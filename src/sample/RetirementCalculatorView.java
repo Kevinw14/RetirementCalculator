@@ -2,9 +2,12 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * RetirementCalcView class sets up a view that gets input from user about their retirement savings
@@ -18,7 +21,7 @@ import javafx.scene.paint.Color;
  * @author Kevin Wood
  * @version 1.0
  */
-public class RetirementCalculatorView extends FlowPane {
+public class RetirementCalculatorView extends Application {
 
     private final Label errorLabel;
 
@@ -34,6 +37,9 @@ public class RetirementCalculatorView extends FlowPane {
 
     private RetirementViewDelegate delegate; // Delegate used to relay messages to controller when calculated button is pressed.
 
+    private final FlowPane view;
+
+    private Stage stage;
     /**
      * Initalizes Labels, TextFields, Button, and Tableview that is needed to display information
      * and take in user input.
@@ -57,6 +63,9 @@ public class RetirementCalculatorView extends FlowPane {
         Button calculateButton = new Button("Calculate");
         saveButton = new Button("Save");
         loadButton = new Button("Load");
+
+        saveButton.setOnAction(this::save);
+        loadButton.setOnAction(this::load);
 
         //Sets the action of the calculate button that calls the delegate method.
         calculateButton.setOnAction(this::calculateButtonPressed);
@@ -86,19 +95,20 @@ public class RetirementCalculatorView extends FlowPane {
         fileManagementPane.setAlignment(Pos.CENTER);
         FlowPane errorPane = new FlowPane(errorLabel);
         errorPane.setAlignment(Pos.CENTER);
+        this.view = new FlowPane();
 
         //Adds FlowPanes to itself.
-        this.setAlignment(Pos.TOP_CENTER);
-        this.setVgap(10);
-        this.setStyle("-fx-padding: 20 0;");
-        this.getChildren().add(fileManagementPane);
-        this.getChildren().add(agePane);
-        this.getChildren().add(retirementSavingsPane);
-        this.getChildren().add(annualRetirementPane);
-        this.getChildren().add(targetSavingsPane);
-        this.getChildren().add(buttonPane);
-        this.getChildren().add(tableView);
-        this.getChildren().add(errorPane);
+        view.setAlignment(Pos.TOP_CENTER);
+        view.setVgap(10);
+        view.setStyle("-fx-padding: 20 0;");
+        view.getChildren().add(fileManagementPane);
+        view.getChildren().add(agePane);
+        view.getChildren().add(retirementSavingsPane);
+        view.getChildren().add(annualRetirementPane);
+        view.getChildren().add(targetSavingsPane);
+        view.getChildren().add(buttonPane);
+        view.getChildren().add(tableView);
+        view.getChildren().add(errorPane);
     }
 
     /**
@@ -109,6 +119,36 @@ public class RetirementCalculatorView extends FlowPane {
      */
     private void calculateButtonPressed(ActionEvent event) {
         delegate.calculateButtonPressed(event);
+    }
+
+    /**
+     * Sends a delegate message to the controller when the load
+     * button is pressed.
+     *
+     * @param event Event object that is passed in when the button is pressed.
+     */
+    private void load(ActionEvent event) {
+        delegate.loadButtonPressed(event, stage);
+    }
+
+    /**
+     * Sends a delegate message to the controller when the save
+     * button is pressed.
+     *
+     * @param event Event object that is passed in when the button is pressed.
+     */
+    private void save(ActionEvent event) {
+        delegate.saveButtonPressed(event, stage);
+
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        this.stage = primaryStage;
+        new Controller(this);
+        primaryStage.setTitle("Retirement Calculator");
+        primaryStage.setScene(new Scene(view, 1400, 600));
+        primaryStage.show();
     }
 
     public TextField getRetirementSavingsTextField() {
@@ -132,7 +172,9 @@ public class RetirementCalculatorView extends FlowPane {
     public Button getLoadButton() {
         return loadButton;
     }
-    public Label getErrorLabel() { return errorLabel; }
+    public Label getErrorLabel() {
+        return errorLabel;
+    }
     public void setDelegate(RetirementViewDelegate delegate) {
         this.delegate = delegate;
     }

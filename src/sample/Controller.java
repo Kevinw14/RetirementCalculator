@@ -2,6 +2,9 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TableCell;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * Controller class that handles setting up the table view with data from the User object.
@@ -15,6 +18,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
 
     private final RetirementCalculatorView view;
     private User user;
+    private final FileHandler<User> handler = new FileHandler<>();
 
     /**
      * Once a user is loaded in, it will update
@@ -45,38 +49,6 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     }
 
     /**
-     * Determines if the amount given from a return on investment is within 10% of the target goal
-     * but less than the target.
-     *
-     * This is used to determine if the cell background should be yellow or white.
-     *
-     * @param investmentReturn The amount that was made that year.
-     * @return returns true if the given number is within 10% the target goal.
-     * Example
-     * Target: $1,000,000
-     * Within 10%: $900,000+
-     */
-    private boolean isWithinTen(Number investmentReturn) {
-        double tenPercent = user.getTargetSavingsForRetirement() / 10.0;
-        double bareMinimum = user.getTargetSavingsForRetirement() - tenPercent;
-
-        return investmentReturn.intValue() >= bareMinimum && investmentReturn.intValue() < user.getTargetSavingsForRetirement();
-    }
-
-    /**
-     * Determines if the amount given from a return on investment is at the target goal or over.
-     * This is used to determine if the cell background should be green or white.
-     *
-     * @param investmentReturn The amount that was made that year.
-     * @return returns true if the given number is at or over the target goal.
-     */
-    private boolean isOver(Number investmentReturn) {
-        return investmentReturn.intValue() >= user.getTargetSavingsForRetirement();
-    }
-
-    /**
-     * Datasource Method
-     *
      * Handles checking the investment return and deciding if it's within 10% or over the target value.
      * If it's over the target it will change the background color of the cell to green.
      * If it's within 10% of the target it will change the background to yellow.
@@ -87,13 +59,13 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      */
     private void handleCellColoring(TableCell<Integer, ?> tableCell, Number investmentReturn) {
         // Checks if the investment return is over the target amount. Will be green if true
-        if (investmentReturn != null && isOver(investmentReturn)) {
+        if (investmentReturn != null && user.isOver(investmentReturn)) {
             String aeroBlue = "#D0F4DE";
             tableCell.setStyle("-fx-background-color: " + aeroBlue);
         }
 
         // Checks if the investment return is with in 10% the target amount. Will be yellow if true
-        if (investmentReturn != null && isWithinTen(investmentReturn)) {
+        if (investmentReturn != null && user.isWithinTen(investmentReturn)) {
             String blond = "#FCF6BD";
             tableCell.setStyle("-fx-background-color: " + blond);
         }
@@ -101,7 +73,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
         // Fixes a visual bug that causes cells that doesn't meet the requirements to turn yellow or green when scrolling.
         // Checks to make sure that cells are neither within 10% or over target amount. Will keep their background
         // to white.
-        if (investmentReturn != null && !isOver(investmentReturn) && !isWithinTen(investmentReturn)) {
+        if (investmentReturn != null && !user.isOver(investmentReturn) && !user.isWithinTen(investmentReturn)) {
             String white = "#FFFFFF";
             tableCell.setStyle("-fx-background-color: " + white);
         }
@@ -121,15 +93,16 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
         // Fixes a visual bug that would put null in the cell when no value was present.
         if (investmentReturn != null && columnIndex == 0) {
             tableCell.setText(String.valueOf(investmentReturn));
-        } else if (investmentReturn != null && columnIndex != 0) {
+        } else if (investmentReturn != null) {
             tableCell.setText("$" + investmentReturn);
         } else {
             tableCell.setText("");
         }
     }
+
     /**
      * Datasource Method
-     *
+     * <p>
      * Uses the number returned to create that n number of rows.
      *
      * @return Number of rows needed to be created
@@ -145,7 +118,7 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
 
     /**
      * Datasource Method
-     *
+     * <p>
      * Gets the users investment returns for that row and returns them
      * to be displayed in the tableview.
      *
@@ -162,10 +135,10 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
 
     /**
      * Delegate Method
-     *
+     * <p>
      * Gets data from all TextFields, creates a new User object with data, and updates
      * the table view with the calculated data.
-     *
+     * <p>
      * Will throw a NumberFormatException if TextFields are empty or a
      * non numeric character was entered.
      *
@@ -189,25 +162,68 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
     }
 
     /**
-     * Datasource Method
+     * Delegate Method
+     * <p>
+     * Gets data from all TextFields, creates a new User object with data, and updates
+     * the table view with the calculated data.
+     * <p>
+     * Will throw a NumberFormatException if TextFields are empty or a
+     * non numeric character was entered.
      *
+     * @param event Event object that is passed in when the button is pressed.
+     * @param stage Overall view that houses our JavaFX program
+     */
+    @Override
+    public void saveButtonPressed(ActionEvent event, Stage stage) {
+        try {
+            handler.save(stage, user);
+        } catch (IOException e) {
+            view.getErrorLabel().setText("Error loading file " + e.toString());
+        } catch (NullPointerException ignored) {}
+    }
+
+    /**
+     * Delegate Method
+     * <p>
+     * Gets data from all TextFields, creates a new User object with data, and updates
+     * the table view with the calculated data.
+     * <p>
+     * Will throw a NumberFormatException if TextFields are empty or a
+     * non numeric character was entered.
+     *
+     * @param event Event object that is passed in when the button is pressed.
+     * @param stage Overall view that houses our JavaFX program
+     */
+    @Override
+    public void loadButtonPressed(ActionEvent event, Stage stage) {
+        try {
+            User user = handler.load(stage);
+            setUser(user);
+        } catch (IOException | ClassNotFoundException e) {
+            view.getErrorLabel().setText("Error saving file " + e.toString());
+        } catch (NullPointerException ignored) { }
+    }
+
+    /**
+     * Datasource Method
+     * <p>
      * Called for each cell in the table view. Can perform styling to table cell,
      * and add values to the cell.
      *
-     * @param tableCell tableCell that is currently being passed in.
-     * @param object object that is in that cell
+     * @param tableCell   tableCell that is currently being passed in.
+     * @param object      object that is in that cell
      * @param columnIndex Index the column is in currently
      */
     @Override
     public void updateCell(TableCell<Integer, ?> tableCell, Object object, int columnIndex) {
-        Number investmentReturn = (Number)object;
+        Number investmentReturn = (Number) object;
         handleCellColoring(tableCell, investmentReturn);
         handleFontStyling(tableCell, investmentReturn, columnIndex);
     }
 
     /**
      * Datasource Method
-     *
+     * <p>
      * Uses the array of Strings to create n number of columns, also sets the
      * array of titles to the titles of each column.
      *
@@ -215,10 +231,9 @@ public class Controller implements TableViewDatasource<Integer>, RetirementViewD
      */
     @Override
     public String[] titlesForColumns() {
-        return new String[] {"Age", "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%"};
+        return new String[]{"Age", "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%"};
     }
 
-    public User getUser() { return user; }
     public void setUser(User user) {
         this.user = user;
         setupView();

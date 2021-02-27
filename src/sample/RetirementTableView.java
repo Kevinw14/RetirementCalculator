@@ -42,14 +42,14 @@ public class RetirementTableView<T> extends TableView<T[]> {
             this.getColumns().add(column);
         }
 
-        setColumnCellFactory();
+        setColumnCellFactory(false);
     }
 
     /**
      * Gets each cell in each column and calls datasource method
      * to update the cells value, or styling.
      */
-    private void setColumnCellFactory() {
+    private void setColumnCellFactory(boolean onUpdate) {
         for (int i = 0; i < this.getColumns().size(); i++) {
             TableColumn<T[], ?> column = this.getColumns().get(i);
             final int columnIndex = i;
@@ -58,6 +58,11 @@ public class RetirementTableView<T> extends TableView<T[]> {
                 protected void updateItem(Object object, boolean isEmpty) {
                     super.updateItem(object, isEmpty);
                     datasource.updateCell(this, object, columnIndex);
+                    
+                    if (onUpdate) {
+                        String white = "#FFFFFF";
+                        tableCell.setStyle("-fx-background-color: " + white);
+                    }
                 }
             });
         }
@@ -70,7 +75,15 @@ public class RetirementTableView<T> extends TableView<T[]> {
      */
     public void update() {
         this.getItems().clear();
+        clearColumns();
         addData();
+    }
+
+    /**
+     *
+     */
+    private void clearColumns() {
+        setColumnCellFactory(true);
     }
 
     /**
