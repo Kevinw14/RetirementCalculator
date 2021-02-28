@@ -142,6 +142,12 @@ public class RetirementCalculatorView extends Application {
 
     }
 
+    /**
+     * Creates a new Controller and passes this view in.
+     * Sets up the overall UI for this application and sets the title.
+     *
+     * @param primaryStage Stage that used to present the overall UI of the JavaFX application
+     */
     @Override
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
@@ -165,12 +171,6 @@ public class RetirementCalculatorView extends Application {
     }
     public RetirementTableView<Integer> getTableView() {
         return tableView;
-    }
-    public Button getSaveButton() {
-        return saveButton;
-    }
-    public Button getLoadButton() {
-        return loadButton;
     }
     public Label getErrorLabel() {
         return errorLabel;

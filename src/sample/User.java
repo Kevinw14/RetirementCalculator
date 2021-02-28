@@ -78,10 +78,7 @@ public class User implements Serializable {
     }
 
     /**
-     *
-     * In Model
-     *
-     * Determines if the amount given from a return on investment is within 10% of the target goal
+     *Determines if the amount given from a return on investment is within 10% of the target goal
      * but less than the target.
      *
      * This is used to determine if the cell background should be yellow or white.
@@ -100,14 +97,13 @@ public class User implements Serializable {
     }
 
     /**
-     *
-     * In Model
      * Determines if the amount given from a return on investment is at the target goal or over.
      * This is used to determine if the cell background should be green or white.
      *
      * @param investmentReturn The amount that was made that year.
      * @return returns true if the given number is at or over the target goal.
      */
+    
     public boolean isOver(Number investmentReturn) {
         return investmentReturn.intValue() >= targetSavingForRetirement;
     }
