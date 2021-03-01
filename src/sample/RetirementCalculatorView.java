@@ -24,14 +24,19 @@ import javafx.stage.Stage;
 public class RetirementCalculatorView extends Application {
 
     private final Label errorLabel;
+    private final Label ageLabel;
+    private final Label retirementSavingsLabel;
+    private final Label annualRetirementInvestmentLabel;
+    private final Label targetSavingForRetirementLabel;
+
+    private final Button calculateButton;
+    private final Button saveButton;
+    private final Button loadButton;
 
     private final TextField ageTextField;
     private final TextField retirementSavingsTextField;
     private final TextField annualRetirementInvestmentTextField;
     private final TextField targetSavingForRetirementTextField;
-
-    private final Button saveButton;
-    private final Button loadButton;
 
     private final RetirementTableView<Integer> tableView;
 
@@ -40,64 +45,65 @@ public class RetirementCalculatorView extends Application {
     private final FlowPane view;
 
     private Stage stage;
+
     /**
      * Initalizes Labels, TextFields, Button, and Tableview that is needed to display information
      * and take in user input.
      * FlowPanes are initialized and Labels and TextFields are added. FlowPanes are then added to the view itself.
      */
     public RetirementCalculatorView() {
-
-        //Initialization of all the UI elements.
-        Label ageLabel = new Label("Age");
-        Label retirementSavingsLabel = new Label("Retirement Savings");
-        Label annualRetirementInvestmentLabel = new Label("Annual Retirement Investment");
-        Label targetSavingForRetirementLabel = new Label("Target Savings For Retirement");
         errorLabel = new Label("");
-        errorLabel.setTextFill(Color.web("#f25c54"));
+        ageLabel = new Label("Age");
+        retirementSavingsLabel = new Label("Retirement Savings");
+        annualRetirementInvestmentLabel = new Label("Annual Retirement Investment");
+        targetSavingForRetirementLabel = new Label("Target Savings For Retirement");
+
+        calculateButton = new Button("Calculate");
+        saveButton = new Button("Save");
+        loadButton = new Button("Load");
 
         ageTextField = new TextField();
         retirementSavingsTextField = new TextField();
         annualRetirementInvestmentTextField = new TextField();
         targetSavingForRetirementTextField = new TextField();
 
-        Button calculateButton = new Button("Calculate");
-        saveButton = new Button("Save");
-        loadButton = new Button("Load");
+        errorLabel.setTextFill(Color.web("#f25c54"));
 
+        //Sets the action of the save button that calls the delegate method.
         saveButton.setOnAction(this::save);
+
+        //Sets the action of the load button that calls the delegate method.
         loadButton.setOnAction(this::load);
 
         //Sets the action of the calculate button that calls the delegate method.
         calculateButton.setOnAction(this::calculateButtonPressed);
-
         tableView = new RetirementTableView<>();
 
         //Disables the row highlight when a tableview cells was clicked.
         tableView.setSelectionModel(null);
 
-        //Sets centering and Hgap between the elements.
+        this.view = new FlowPane();
+        addToContainer();
+    }
+
+    /**
+     * Adds UI components to their FlowPanes and then adds the flowpanes
+     * to the overall container that will be displayed.
+     */
+    private void addToContainer() {
         FlowPane agePane = new FlowPane(ageLabel, ageTextField);
         agePane.setHgap(20);
-        agePane.setAlignment(Pos.CENTER);
         FlowPane retirementSavingsPane = new FlowPane(retirementSavingsLabel, retirementSavingsTextField);
         retirementSavingsPane.setHgap(20);
-        retirementSavingsPane.setAlignment(Pos.CENTER);
         FlowPane annualRetirementPane = new FlowPane(annualRetirementInvestmentLabel, annualRetirementInvestmentTextField);
         annualRetirementPane.setHgap(20);
-        annualRetirementPane.setAlignment(Pos.CENTER);
         FlowPane targetSavingsPane = new FlowPane(targetSavingForRetirementLabel, targetSavingForRetirementTextField);
         targetSavingsPane.setHgap(20);
-        targetSavingsPane.setAlignment(Pos.CENTER);
         FlowPane buttonPane = new FlowPane(calculateButton);
-        buttonPane.setAlignment(Pos.CENTER);
         FlowPane fileManagementPane = new FlowPane(saveButton, loadButton);
         fileManagementPane.setHgap(20);
-        fileManagementPane.setAlignment(Pos.CENTER);
         FlowPane errorPane = new FlowPane(errorLabel);
-        errorPane.setAlignment(Pos.CENTER);
-        this.view = new FlowPane();
 
-        //Adds FlowPanes to itself.
         view.setAlignment(Pos.TOP_CENTER);
         view.setVgap(10);
         view.setStyle("-fx-padding: 20 0;");
@@ -110,7 +116,6 @@ public class RetirementCalculatorView extends Application {
         view.getChildren().add(tableView);
         view.getChildren().add(errorPane);
     }
-
     /**
      * Sends a delegate message to the controller when the calculated
      * button is pressed.
@@ -139,7 +144,6 @@ public class RetirementCalculatorView extends Application {
      */
     private void save(ActionEvent event) {
         delegate.saveButtonPressed(event, stage);
-
     }
 
     /**

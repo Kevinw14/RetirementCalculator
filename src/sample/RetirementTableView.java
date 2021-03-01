@@ -34,8 +34,8 @@ public class RetirementTableView<T> extends TableView<T[]> {
         for (int i = 0; i < titles.length; i++) {
             TableColumn<T[], ?> column = new TableColumn<>(titles[i]);
             final int columnIndex = i;
-            column.setCellValueFactory(cellData -> {
-                T[] row = cellData.getValue();
+            column.setCellValueFactory(cellData -> { // https://stackoverflow.com/questions/32377248/java-fx-display-integer-array-in-tableview
+                T[] row = cellData.getValue();       // A callback to return the value of each cell in a SimpleObjectProperty
                 return new SimpleObjectProperty(row[columnIndex]);
             });
 
@@ -53,8 +53,8 @@ public class RetirementTableView<T> extends TableView<T[]> {
         for (int i = 0; i < this.getColumns().size(); i++) {
             TableColumn<T[], ?> column = this.getColumns().get(i);
             final int columnIndex = i;
-            column.setCellFactory(tableCell -> new TableCell() {
-                @Override
+            column.setCellFactory(tableCell -> new TableCell() { // https://stackoverflow.com/questions/39782952/javafx-set-cell-background-color-of-tablecolumn
+                @Override                                        // A callback returns each table cell that then we perform styling to.
                 protected void updateItem(Object object, boolean isEmpty) {
                     super.updateItem(object, isEmpty);
                     datasource.updateCell(this, object, columnIndex);

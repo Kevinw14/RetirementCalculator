@@ -51,17 +51,17 @@ public class User implements Serializable {
 
         ROI[] lifetimeInvestmentReturns = new ROI[lifetimeAccountAge];
 
-        for (int accountAge = 0; accountAge < lifetimeAccountAge; accountAge++) {
+        for (int index = 0; index < lifetimeAccountAge; index++) {
 
-            int currentAge = age + accountAge;
+            int currentAge = age + index;
 
             ROI roi;
-            if (accountAge == 0) {
+            if (index == 0) {
                 roi = new ROI(null, currentAge, annualRetirementInvestment, retirementSavings);
             } else {
-                roi = new ROI(lifetimeInvestmentReturns[accountAge - 1], currentAge, annualRetirementInvestment, retirementSavings);
+                roi = new ROI(lifetimeInvestmentReturns[index - 1], currentAge, annualRetirementInvestment, retirementSavings);
             }
-            lifetimeInvestmentReturns[accountAge] = roi;
+            lifetimeInvestmentReturns[index] = roi;
         }
 
         return lifetimeInvestmentReturns;
@@ -103,10 +103,10 @@ public class User implements Serializable {
      * @param investmentReturn The amount that was made that year.
      * @return returns true if the given number is at or over the target goal.
      */
-    
     public boolean isOver(Number investmentReturn) {
         return investmentReturn.intValue() >= targetSavingForRetirement;
     }
+
     public int getAge() { return age; }
     public int getRetirementSavings() { return retirementSavings; }
     public int getAnnualRetirementInvestment() { return annualRetirementInvestment; }

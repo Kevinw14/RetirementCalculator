@@ -30,18 +30,17 @@ public class ROI implements Serializable {
      */
     public ROI(ROI lastYearReturn, int age, int annualContribution, int retirementSavings) {
         this.annualContribution = annualContribution;
-
-        int COLUMN_SIZE = 16;
-        Integer[] investmentReturns = new Integer[COLUMN_SIZE];
+        int columnSize = 16;
+        Integer[] investmentReturns = new Integer[columnSize];
 
         investmentReturns[0] = age;
 
         if (lastYearReturn == null) {
-            for (int i = 1; i < COLUMN_SIZE; i++) {
+            for (int i = 1; i < columnSize; i++) {
                 investmentReturns[i] = retirementSavings;
             }
         } else {
-            for (int i = 1; i < COLUMN_SIZE; i++) {
+            for (int i = 1; i < columnSize; i++) {
                 investmentReturns[i] = calculateReturn(i - 1, lastYearReturn.investmentReturns[i]);
             }
         }
